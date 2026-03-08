@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'maven 3.9.12'
+    }
+    environment {
+        
+        DOCKER_IMAGE = "demo-app" 
+        CONTAINER_NAME = "springboot-container"
+        JAR_FILE_NAME = "app.jar"
+        PORT = "8081"
+        REMOTE_USER = "ec2-user"
+        REMOTE_HOST = "43.202.190.20"
+        REMOTE_DIR = "/home/ec2-user/deploy"
+        SSH_CREDENTIALS_ID = "e1d8e797-03d0-4e9a-a10f-4f608f68c7a7"
+    }
+
+    stages {
+        stage('Git Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Maven Build') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+
+}
+
